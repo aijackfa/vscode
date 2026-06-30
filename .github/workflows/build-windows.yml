@@ -17,10 +17,10 @@ jobs:
         node-version: 24 # Matches the required engine update natively
 
     - name: Install Missing Linux Development Libraries
-      # Installs the system header libraries needed by kerberos and native-keymap modules
+      # Fixed the typo spacing between libxkbfile-dev and pkg-config below
       run: |
         sudo apt-get update
-        sudo apt-get install -y libkrb5-dev libx11-dev libxkbfile-devpkg-config build-essential
+        sudo apt-get install -y libkrb5-dev libx11-dev libxkbfile-dev pkg-config build-essential
 
     - name: Install Dependencies
       run: npm ci
