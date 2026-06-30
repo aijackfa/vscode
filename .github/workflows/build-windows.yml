@@ -36,4 +36,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: vscode-windows-ready-build
-        path: . # Packages the source code and your fast build caches together into a zip file
+        path: .
+        include-hidden-files: true # <--- This fixes the missing dotfiles (.npmrc, .nvmrc) completely!
