@@ -1,11 +1,11 @@
-name: Remote Windows Build
+name: Remote Linux Build
 
 on:
   workflow_dispatch: # Allows you to trigger the build manually with a button click
 
 jobs:
   build:
-    runs-on: windows-2022 # Pin the host machine to the stable Windows 2022 image
+    runs-on: ubuntu-latest # Swapped to ultra-fast, stable Linux runner to prevent freezing
 
     steps:
     - name: Checkout Code
@@ -14,14 +14,10 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 24 # Switched to Node 24 to perfectly match the project requirements
-
-    - name: Setup MSBuild and VS Compiler Environments
-      uses: microsoft/setup-msbuild@v2
+        node-version: 24 # Matches the required engine update natively
 
     - name: Install Dependencies
-      # Force node-gyp to use the stable Visual Studio 2022 compilers pre-installed on this server
-      run: npm ci --msvs_version=2022
+      run: npm ci
 
     - name: Compile Application
       run: npm run compile
