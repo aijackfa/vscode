@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2022 # Pin the runner to a stable Windows 2022 image
+    runs-on: windows-2022 # Pin the host machine to the stable Windows 2022 image
 
     steps:
     - name: Checkout Code
@@ -14,13 +14,13 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 22 # Use Node 22 to cleanly support modern preinstall native TS execution
+        node-version: 24 # Switched to Node 24 to perfectly match the project requirements
 
     - name: Setup MSBuild and VS Compiler Environments
       uses: microsoft/setup-msbuild@v2
 
     - name: Install Dependencies
-      # Bypasses the local gyp engine crash by assigning variables to the stable toolset directly
+      # Force node-gyp to use the stable Visual Studio 2022 compilers pre-installed on this server
       run: npm ci --msvs_version=2022
 
     - name: Compile Application
@@ -30,4 +30,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: vscode-windows-ready-build
-        path: . # Includes all compiled build caches and codebase items together
+        path: . # Packages the source code and your fast build caches together into a zip file
