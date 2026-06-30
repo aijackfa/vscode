@@ -16,11 +16,11 @@ jobs:
       with:
         node-version: 24 # Matches the required engine update natively
 
-    - name: Install Missing Linux Network Headers
-      # Installs the gssapi/gssapi.h library files needed by the kerberos module
+    - name: Install Missing Linux Development Libraries
+      # Installs the system header libraries needed by kerberos and native-keymap modules
       run: |
         sudo apt-get update
-        sudo apt-get install -y libkrb5-dev
+        sudo apt-get install -y libkrb5-dev libx11-dev libxkbfile-devpkg-config build-essential
 
     - name: Install Dependencies
       run: npm ci
