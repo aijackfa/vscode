@@ -1,11 +1,11 @@
 name: Remote Linux Build
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to trigger the build manually with a button click
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # Uses the fast Linux runner
 
     steps:
     - name: Checkout Code
@@ -14,18 +14,20 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 24
+        node-version: 24 # Matches the required engine update natively
 
     - name: Install Missing Linux Development Libraries
       run: |
         sudo apt-get update
         sudo apt-get install -y libkrb5-dev libx11-dev libxkbfile-dev pkg-config build-essential
 
-    - name: Fast Install Dependencies
-      # --no-audit and --omit=optional skips downloading heavy browser binaries
-      run: npm ci --no-audit --omit=optional
+    - name: Install Dependencies
+      # Removed --omit=optional to prevent postinstall scripts from crashing
+      run: npm ci --no-audit
       env:
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skips downloading massive testing browsers
+        # Crucial environment flags to tell postinstall to skip the massive test browsers
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        ELECTRON_SKIP_BINARY_DOWNLOAD: 1 
 
     - name: Compile Application
       run: npm run compile
@@ -34,4 +36,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: vscode-windows-ready-build
-        path: .
+        path: . # Packages the source code and your fast build caches together into a zip file
