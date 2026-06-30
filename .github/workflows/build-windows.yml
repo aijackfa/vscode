@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Swapped to ultra-fast, stable Linux runner to prevent freezing
+    runs-on: ubuntu-latest # Uses the ultra-fast Linux runner to prevent hanging
 
     steps:
     - name: Checkout Code
@@ -15,6 +15,12 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 24 # Matches the required engine update natively
+
+    - name: Install Missing Linux Network Headers
+      # Installs the gssapi/gssapi.h library files needed by the kerberos module
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libkrb5-dev
 
     - name: Install Dependencies
       run: npm ci
